@@ -1,0 +1,38 @@
+name: CI - Code Quality & Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-test:
+    name: Lint, Format & Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' # Use the version you're developing with
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff mypy pytest pytest-cov
+
+    - name: Lint with Ruff
+      run: ruff check . --output-format=github [citation:11]
+
+    - name: Check formatting with Ruff
+      run: ruff format . --check [citation:10]
+
+    - name: Type check with MyPy
+      run: mypy . --ignore-missing-imports [citation:2]
+
+    - name: Run tests with pytest
+      run: pytest --cov=. --cov-report=xml
