@@ -15,7 +15,8 @@ engin = create_engine(database_url)
 session = sessionmaker(autocommit=False, autoflush=False, bind=engin)
 
 
-Base = DeclarativeBase()
+class Base(DeclarativeBase):
+    pass
 
 
 class BaseClass(Base):
