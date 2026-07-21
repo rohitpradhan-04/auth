@@ -5,7 +5,7 @@ from ..database import BaseClass
 
 
 class User(BaseClass):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
@@ -13,6 +13,6 @@ class User(BaseClass):
     phone_number = Column(String, unique=True, nullable=True)
     password = Column(String)
 
-    service_id = Column(Integer, ForeignKey('service.id'))
+    service_id = Column(Integer, ForeignKey("service.id"))
 
-    service = relationship('Service', back_populates='users')
+    service = relationship("Service", back_populates="users")

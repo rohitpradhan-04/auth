@@ -10,18 +10,18 @@ from ..enum import Constants
 
 class JWT:
     secrete = Constants().secret
-    algorithm = 'HS256'
+    algorithm = "HS256"
 
     @classmethod
     def encode_jwt(cls, user_data: dict):
         try:
             payload = user_data.copy()
-            payload['iat'] = datetime.now(timezone.utc)
-            payload['exp'] = datetime.now(timezone.utc) + timedelta(hours=1)
+            payload["iat"] = datetime.now(timezone.utc)
+            payload["exp"] = datetime.now(timezone.utc) + timedelta(hours=1)
             encode = jwt.encode(payload, cls.secrete, algorithm=cls.algorithm)
             return encode
         except Exception:
-            logging.exception('Error while encoding the JWT')
+            logging.exception("Error while encoding the JWT")
             raise
 
     @classmethod
@@ -31,11 +31,11 @@ class JWT:
             return decode
 
         except ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail='Token has expired') from None
+            raise HTTPException(status_code=401, detail="Token has expired") from None
 
         except InvalidTokenError:
-            raise HTTPException(status_code=401, detail='Invalid token') from None
+            raise HTTPException(status_code=401, detail="Invalid token") from None
 
         except Exception:
-            logging.exception('Error while decoding the JET')
+            logging.exception("Error while decoding the JET")
             raise

@@ -7,7 +7,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from .enum import Constants
 
 db_connection = Constants()
-database_url = f'postgresql://{db_connection.db_user}:{db_connection.db_password}@{db_connection.db_host}:{db_connection.db_port}/{db_connection.db_name}'
+database_url = f"postgresql://{db_connection.db_user}:{db_connection.db_password}@{db_connection.db_host}:{db_connection.db_port}/{db_connection.db_name}"
 
 
 engin = create_engine(database_url)

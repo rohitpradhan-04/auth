@@ -6,9 +6,9 @@ from common.routes.user import route as user_route
 app = FastAPI()
 
 
-@app.get('/health')
+@app.get("/health")
 def health():
-    return {'status': 'ok'}
+    return {"status": "ok"}
 
 
 app.include_router(user_route)
