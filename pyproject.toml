@@ -16,6 +16,12 @@ warn_unused_configs = true
 ignore_missing_imports = true
 exclude = ["alembic/"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]  # Path to your test directory
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+
+
 [dependency-groups]
 dev = [
     "mypy>=2.3.0",
