@@ -1,30 +1,33 @@
-from fastapi import APIRouter, HTTPException
-from fastapi import Depends
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.requests import Request
+from sqlalchemy.orm import Session
+
 from common.database import get_bd
+from common.helpers.jwt import JWT
+from common.helpers.password import check_password, make_password
 from common.models.user import User
 from common.serializer.userSerializer import (
-    UserList as UserSerializer,
-    UserRegistration,
-    UserLogin,
     LoginResponse,
-    ResetPasswordSchema
+    ResetPasswordSchema,
+    UserLogin,
+    UserRegistration,
 )
-from sqlalchemy.orm import Session
-from typing import List
-from fastapi.requests import Request
-from common.helpers.password import make_password, check_password
-from common.helpers.jwt import JWT
+from common.serializer.userSerializer import (
+    UserList as UserSerializer,
+)
 
 route = APIRouter(prefix="/users", tags=["Users"])
 
 
 @route.get("/list", response_model=List[UserSerializer])
-def UserList(db: Session = Depends(get_bd)):
+def user_list(db: Session = Depends(get_bd)):
     return db.query(User).all()
 
 
 @route.post("/register")
-def Register(request: UserRegistration = Request, db: Session = Depends(get_bd)):
+def register(request: UserRegistration = Request, db: Session = Depends(get_bd)):
     user = User(
         name=request.name,
         email=request.email,
@@ -38,32 +41,28 @@ def Register(request: UserRegistration = Request, db: Session = Depends(get_bd))
 
 
 @route.post("/login")
-def Login(request: UserLogin = Request, db: Session = Depends(get_bd)):
+def login(request: UserLogin = Request, db: Session = Depends(get_bd)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
         raise HTTPException(status_code=404, detail="No User Found")
-    checkPassword = check_password(request.password, user.password)
-    if not checkPassword:
+    check_password_result = check_password(request.password, user.password)
+    if not check_password_result:
         raise HTTPException(status_code=401, detail="Incorrect Password")
-    login_response = LoginResponse(
-        id = user.id,
-        email = user.email
-    )
-    token = JWT().EncodeJwt(login_response.model_dump())
-    return {
-        "token" : token,
-        "token_type" : "bearer"
-    }
+    login_response = LoginResponse(id=user.id, email=user.email)
+    token = JWT().encode_jwt(login_response.model_dump())
+    return {"token": token, "token_type": "bearer"}
 
-@route.post('/password/reset')
-def ResetPassword(request : ResetPasswordSchema = Request , db :Session = Depends(get_bd)):
+
+@route.post("/password/reset")
+def reset_password(
+    request: ResetPasswordSchema = Request, db: Session = Depends(get_bd)
+):
+
     current_user = db.query(User).filter(User.id == 1).first()
     if not current_user:
-        raise HTTPException(status_code=403,detail="no user found")
+        raise HTTPException(status_code=403, detail="no user found")
     current_user.password = make_password(request.new_password)
     db.commit()
     db.refresh(current_user)
 
-    return {
-        "status" : 200, "message" : "password reset successfully"
-    }
+    return {"status": 200, "message": "password reset successfully"}

@@ -1,7 +1,10 @@
 [tool.ruff]
 line-length = 88 # Black-compatible default [citation:1]
 target-version = "py311" # Adjust to your Python version
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B", "Q"] # Common rule sets [citation:11]
+ignore = ["B008"]
 
 [tool.ruff.format]
 quote-style = "single" # Optional: Enforce single quotes [citation:1]
