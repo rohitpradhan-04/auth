@@ -1,13 +1,29 @@
 [tool.ruff]
 line-length = 88 # Black-compatible default [citation:1]
 target-version = "py311" # Adjust to your Python version
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B", "Q"] # Common rule sets [citation:11]
+ignore = ["B008","Q000","Q003"]
 
 [tool.ruff.format]
-quote-style = "single" # Optional: Enforce single quotes [citation:1]
+quote-style = "double" # Optional: Enforce single quotes [citation:1]
 
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
+exclude = ["alembic/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]  # Path to your test directory
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "mypy-upgrade>=0.0.1b6",
+]

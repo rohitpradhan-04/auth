@@ -1,7 +1,7 @@
-from ..database import Base
 from sqlalchemy import Column, Integer, String
-from ..database import BaseClass
 from sqlalchemy.orm import relationship
+
+from ..database import BaseClass
 
 
 class Service(BaseClass):

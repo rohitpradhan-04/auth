@@ -2,9 +2,9 @@ name: CI - Code Quality & Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   lint-and-test:
@@ -26,13 +26,13 @@ jobs:
         pip install ruff mypy pytest pytest-cov
 
     - name: Lint with Ruff
-      run: ruff check . --output-format=github [citation:11]
+      run: ruff check . --output-format=github
 
     - name: Check formatting with Ruff
-      run: ruff format . --check [citation:10]
+      run: ruff format . --check
 
     - name: Type check with MyPy
-      run: mypy . --ignore-missing-imports [citation:2]
+      run: mypy . --ignore-missing-imports
 
     - name: Run tests with pytest
       run: pytest --cov=. --cov-report=xml
