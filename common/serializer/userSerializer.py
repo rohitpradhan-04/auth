@@ -31,8 +31,8 @@ class ResetPasswordSchema(BaseModel):
     current_password: str
     new_password: str
 
-    @model_validator(mode="after")
+    @model_validator(mode='after')
     def validate_passwords(self):
         if self.current_password == self.new_password:
-            raise ValueError("New password cannot be the same as the current password.")
+            raise ValueError('New password cannot be the same as the current password.')
         return self
