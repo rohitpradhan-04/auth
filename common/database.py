@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import Boolean, Column, DateTime
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from .enum import Constants
 
@@ -15,7 +15,7 @@ engin = create_engine(database_url)
 session = sessionmaker(autocommit=False, autoflush=False, bind=engin)
 
 
-Base = declarative_base()
+Base = DeclarativeBase()
 
 
 class BaseClass(Base):
